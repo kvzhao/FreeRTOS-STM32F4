@@ -12,13 +12,14 @@ FREERTOS:=$(CURDIR)/FreeRTOS
 STARTUP:=$(CURDIR)/hardware
 LINKER_SCRIPT:=$(CURDIR)/Utilities/stm32_flash.ld
 
-INCLUDE=-I$(CURDIR)/hardware
+INCLUDE+=-I$(CURDIR)/hardware
 INCLUDE+=-I$(FREERTOS)/include
 INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
 INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
+INCLUDE+=-I$(CURDIR)/inc
 
 BUILD_DIR = $(CURDIR)/build
 BIN_DIR = $(CURDIR)/binary
@@ -27,6 +28,7 @@ BIN_DIR = $(CURDIR)/binary
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
+		  $(CURDIR)/src \
           $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
 vpath %.s $(STARTUP)
@@ -37,6 +39,7 @@ SRC+=stm32f4xx_it.c
 SRC+=system_stm32f4xx.c
 SRC+=main.c
 SRC+=syscalls.c
+SRC+=servo.c
 
 # FreeRTOS Source Files
 SRC+=port.c
@@ -51,7 +54,7 @@ SRC+=heap_4.c
 SRC+=misc.c
 #SRC+=stm32f4xx_adc.c
 #SRC+=stm32f4xx_dac.c
-# SRC+=stm32f4xx_dma.c
+#SRC+=stm32f4xx_dma.c
 #SRC+=stm32f4xx_exti.c
 #SRC+=stm32f4xx_flash.c
 SRC+=stm32f4xx_gpio.c

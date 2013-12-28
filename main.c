@@ -5,9 +5,12 @@
 #include "stdio.h"
 #include "stm32f4xx_usart.h"
 
+#include "servo.h"
+
 void init_USART3(void);
 
 void test_FPU_test(void* p);
+void test_servo_task(void* p);
 
 int main(void) {
   uint8_t ret;
@@ -15,11 +18,13 @@ int main(void) {
   SystemInit();
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
   init_USART3();
+  Servo_Configuration();
 
-  ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+  // ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+  ret = xTaskCreate(test_servo_task, "SERVO", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
   if (ret == pdTRUE) {
-    printf("System Started!\n");
+    printf("System Started!\n\r");
     vTaskStartScheduler();  // should never return
   } else {
     printf("System Error!\n");
@@ -79,6 +84,28 @@ void test_FPU_test(void* p) {
     vTaskDelay(1000);
   }
   vTaskDelete(NULL);
+}
+
+void test_servo_task(void *pvTaskParameters)
+{
+    printf("Start Servo test task.\n\t");
+    while(1) {
+        Servo_set_pos(60,0);
+        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
+        vTaskDelay(500);
+
+        Servo_set_pos(120,0);
+        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
+        vTaskDelay(500);
+
+        Servo_set_pos(60,0);
+        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
+        vTaskDelay(500);
+
+        Servo_set_pos(180,0);
+        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
+        vTaskDelay(500);
+    }
 }
 
 /*
