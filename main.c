@@ -7,8 +7,10 @@
 
 #include "servo.h"
 
-void init_USART3(void);
+#define MAX_STRLEN 12
+volatile char received_string[MAX_STRLEN+1]; // this will hold the recieved string
 
+void USART3_Configuration(void);
 void test_FPU_test(void* p);
 void test_servo_task(void* p);
 
@@ -17,7 +19,7 @@ int main(void) {
 
   SystemInit();
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-  init_USART3();
+  USART3_Configuration();
   Servo_Configuration();
 
   // ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
@@ -111,7 +113,7 @@ void test_servo_task(void *pvTaskParameters)
 /*
  * Configure USART3(PB10, PB11) to redirect printf data to host PC.
  */
-void init_USART3(void) {
+void USART3_Configuration(void) {
   GPIO_InitTypeDef GPIO_InitStruct;
   USART_InitTypeDef USART_InitStruct;
 
@@ -135,5 +137,41 @@ void init_USART3(void) {
   USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
   USART_Init(USART3, &USART_InitStruct);
-  USART_Cmd(USART3, ENABLE);
+
+  /* USART for receiving data */
+  NVIC_InitTypeDef NVIC_InitStructure;
+  USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+
+    NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;		 // we want to configure the USART1 interrupts
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// this sets the priority group of the USART1 interrupts
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		 // this sets the subpriority inside the group
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			 // the USART1 interrupts are globally enabled
+    NVIC_Init(&NVIC_InitStructure);							 // the properties are passed to the NVIC_Init function which takes care of the low level stuff
+
+    USART_Cmd(USART3, ENABLE);
+}
+
+
+// this is the interrupt request handler (IRQ) for ALL USART1 interrupts
+void USART3_IRQHandler(void) {
+
+    // check if the USART3 receive interrupt flag was set
+    if( USART_GetITStatus(USART3, USART_IT_RXNE) ){
+
+    static uint8_t cnt = 0; // this counter is used to determine the string length
+    char t = USART3->DR; // the character from the USART3 data register is saved in t
+
+    /* check if the received character is not the LF character (used to determine end of string)
+    * or the if the maximum string length has been been reached
+    */
+        if( (t != 'n') && (cnt < MAX_STRLEN) ) {
+            received_string[cnt] = t;
+            cnt++;
+         }
+        else{ // otherwise reset the character counter and print the received string
+            cnt = 0;
+            printf("%s\r\n", received_string);
+        }
+    }
 }
