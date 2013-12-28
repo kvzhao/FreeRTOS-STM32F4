@@ -1,6 +1,6 @@
 TARGET:=FreeRTOS
 # TODO change to your ARM gcc toolchain path
-TOOLCHAIN_ROOT:=~/gcc-arm-none-eabi
+TOOLCHAIN_ROOT:=/usr
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
 TOOLCHAIN_PREFIX:=arm-none-eabi
 
@@ -26,8 +26,8 @@ BIN_DIR = $(CURDIR)/binary
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
-	  $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
-	  $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
+          $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
+          $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
 vpath %.s $(STARTUP)
 ASRC=startup_stm32f4xx.s
