@@ -22,7 +22,7 @@ int main(void) {
   Servo_Configuration();
 
   // ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  ret = xTaskCreate(test_servo_task, "SERVO", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+  // ret = xTaskCreate(test_servo_task, "SERVO", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
   if (ret == pdTRUE) {
     printf("System Started!\n\r");

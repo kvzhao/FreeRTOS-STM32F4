@@ -26,6 +26,7 @@
 #include "stm32f4xx_it.h"
 #include "stdint.h"
 #include "serial_io.h"
+#include "sys_manager.h"
 
 extern volatile char received_string[];
 
@@ -141,22 +142,19 @@ void DebugMon_Handler(void)
 // this is the interrupt request handler (IRQ) for ALL USART3 interrupts
 void USART3_IRQHandler(void) {
 
+    serial_msg rx_msg;
+    long lHigherPriorityTaskWoken = pdFALSE;
+
     // check if the USART3 receive interrupt flag was set
     if( USART_GetITStatus(USART3, USART_IT_RXNE) ){
 
-    static uint8_t cnt = 0; // this counter is used to determine the string length
-    char t = USART3->DR; // the character from the USART3 data register is saved in t
+        rx_msg.ch = USART_ReceiveData(USART3);
+        // USART3->DR; // data register?
 
-    /* check if the received character is not the LF character (used to determine end of string)
-    * or the if the maximum string length has been been reached
-    */
-        if( (t != 'n') && (cnt < MAX_STRLEN) ) {
-            received_string[cnt] = t;
-            cnt++;
-         }
-        else{ // otherwise reset the character counter and print the received string
-            cnt = 0;
-            printf("%s\r\n", received_string);
+        if(!xQueueSendToBackFromISR(serial_rx_queue, &rx_msg, &lHigherPriorityTaskWoken) ) {
+            portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
+        } else {
+            while(1); // wait
         }
     }
 }
