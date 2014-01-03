@@ -98,8 +98,6 @@ all: $(OBJ)
 	$(OBJCOPY) -O ihex $(BIN_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).hex
 	$(OBJCOPY) -O binary $(BIN_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).bin
 
-.PHONY: clean
-
 clean:
 	rm -f $(OBJ)
 	rm -f $(ASRC:%.s=$(BUILD_DIR)/%.o)
@@ -109,3 +107,11 @@ clean:
 
 flash:
 	st-flash write $(BIN_DIR)/$(TARGET).bin 0x8000000
+
+#======================================================================#
+openocd: flash
+	openocd -s /opt/openocd/share/openocd/scripts/
+gdbauto:
+	$(GDB) -x openocd_gdb.gdb
+
+.PHONY:all clean flash openocd gdbauto
