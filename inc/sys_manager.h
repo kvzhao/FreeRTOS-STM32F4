@@ -15,5 +15,6 @@ enum {
 };
 
 extern xQueueHandle serial_rx_queue;
+extern xSemaphoreHandle serial_tx_wait_sem;
 
 #endif
