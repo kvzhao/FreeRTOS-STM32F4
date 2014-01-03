@@ -151,7 +151,6 @@ void USART3_IRQHandler(void) {
     } else if( USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 
         rx_msg.ch = USART_ReceiveData(USART3);
-        counter++;
         /* for debugging */
         // printf("%c\r\n",rx_msg.ch);
 
