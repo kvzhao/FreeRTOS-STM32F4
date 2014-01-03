@@ -11,6 +11,13 @@ typedef struct {
     char ch;
 } serial_msg;
 
+typedef struct {
+    char (*getch)();
+    void (*putch)(char c);
+} serial_ops;
+
+extern serial_ops serial;
+
 void Serial_Configuration(void);
 
 //extern xSemaphoreHandle serial_tx_wait_sem;

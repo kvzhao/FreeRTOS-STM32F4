@@ -1,4 +1,6 @@
 #include "serial_io.h"
+#include "sys_manager.h"
+
 #include "FreeRTOSConfig.h"
 #include "stm32f4xx_usart.h"
 #include "stm32f4xx_gpio.h"
@@ -52,3 +54,23 @@ void Serial_Configuration(void)
 {
     USART3_Configuration();
 }
+
+char get_char()
+{
+    serial_msg msg;
+    while(!xQueueReceive(serial_rx_queue, &msg, portMAX_DELAY));
+    return msg.ch;
+}
+
+void put_char(char c)
+{
+    while(!xSemaphoreTake(serial_tx_wait_sem, portMAX_DELAY));
+    USART_SendData(USART3, (uint16_t)c);
+    USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
+}
+
+/* Serial read/write callback functions */
+serial_ops serial = {
+    .getch = get_char,
+    .putch = put_char,
+};
