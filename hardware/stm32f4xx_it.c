@@ -145,18 +145,25 @@ void USART3_IRQHandler(void) {
     serial_msg rx_msg;
     long lHigherPriorityTaskWoken = pdFALSE;
 
-    // check if the USART3 receive interrupt flag was set
-    if( USART_GetITStatus(USART3, USART_IT_RXNE) ){
+    if(USART_GetITStatus(USART3, USART_IT_TXE) != RESET) {
+        xSemaphoreGiveFromISR(serial_tx_wait_sem, &lHigherPriorityTaskWoken);
+        USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+    } else if( USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
 
         rx_msg.ch = USART_ReceiveData(USART3);
-        // USART3->DR; // data register?
+        counter++;
+        /* for debugging */
+        // printf("%c\r\n",rx_msg.ch);
 
         if(!xQueueSendToBackFromISR(serial_rx_queue, &rx_msg, &lHigherPriorityTaskWoken) ) {
             portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
-        } else {
-            while(1); // wait
         }
+
+    } else {
+            while(1); // wait
     }
+
+    portEND_SWITCHING_ISR(lHigherPriorityTaskWoken);
 }
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

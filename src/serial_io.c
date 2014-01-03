@@ -1,4 +1,5 @@
 #include "serial_io.h"
+#include "FreeRTOSConfig.h"
 #include "stm32f4xx_usart.h"
 #include "stm32f4xx_gpio.h"
 
@@ -35,9 +36,11 @@ void USART3_Configuration(void) {
   /* USART for receiving data */
   NVIC_InitTypeDef NVIC_InitStructure;
   USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+  USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
 
     NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;       // we want to configure the USART3 interrupts
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// this sets the priority group of the USART3 interrupts
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY +1;
+    // this sets the priority group of the USART3 interrupts
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      // this sets the subpriority inside the group
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;         // the USART3 interrupts are globally enabled
     NVIC_Init(&NVIC_InitStructure); // the properties are passed to the NVIC_Init function which takes care of the low level stuff
