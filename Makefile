@@ -42,6 +42,7 @@ SRC += syscalls.c
 SRC += servo.c
 SRC += serial_io.c
 SRC += sys_manager.c
+SRC += linenoise.c
 
 # FreeRTOS Source Files
 SRC+=port.c
