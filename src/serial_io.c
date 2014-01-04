@@ -27,7 +27,7 @@ void USART3_Configuration(void) {
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource10, GPIO_AF_USART3);
   GPIO_PinAFConfig(GPIOB, GPIO_PinSource11, GPIO_AF_USART3);
 
-  USART_InitStruct.USART_BaudRate = 115200;
+  USART_InitStruct.USART_BaudRate = 57600;
   USART_InitStruct.USART_WordLength = USART_WordLength_8b;
   USART_InitStruct.USART_StopBits = USART_StopBits_1;
   USART_InitStruct.USART_Parity = USART_Parity_No;
@@ -74,3 +74,20 @@ serial_ops serial = {
     .getch = get_char,
     .putch = put_char,
 };
+
+int putstr(const char *msg)
+{
+    for(;*msg;++msg)
+        serial.putch(*msg);
+    return 1;
+}
+
+
+int getstr(void)
+{
+    char str;
+    str = serial.getch();
+    printf("%c",str);
+    return 1;
+}
+

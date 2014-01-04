@@ -20,6 +20,9 @@ extern serial_ops serial;
 
 void Serial_Configuration(void);
 
+int putstr(const char *msg);
+int getstr(void);
+
 //extern xSemaphoreHandle serial_tx_wait_sem;
 //extern xQueueHandle serial_rx_queue;
 
