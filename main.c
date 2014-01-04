@@ -10,6 +10,7 @@
 #include "servo.h"
 #include "serial_io.h"
 #include "sys_manager.h"
+#include "shell.h"
 
 void USART3_Configuration(void);
 void null_task(void *p);
@@ -30,8 +31,11 @@ int main(void) {
 
   // ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
   // ret = xTaskCreate(test_servo_task, "SERVO", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  ret = xTaskCreate(null_task, "Null Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-
+  // ret = xTaskCreate(null_task, "Null Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+  ret = xTaskCreate(shell_task,
+          (signed portCHAR *)"Shell",
+          2048, NULL,
+          tskIDLE_PRIORITY +2, NULL);
 
   if (ret == pdTRUE) {
     printf("System Started!\n\r");
