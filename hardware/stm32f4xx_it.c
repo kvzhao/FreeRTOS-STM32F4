@@ -28,6 +28,7 @@
 #include "serial_io.h"
 #include "sys_manager.h"
 
+//#define USART_ECHO
 extern volatile char received_string[];
 
 /* Private typedef -----------------------------------------------------------*/
@@ -152,7 +153,9 @@ void USART3_IRQHandler(void) {
 
         rx_msg.ch = USART_ReceiveData(USART3);
         /* for debugging */
-        // printf("%c\r\n",rx_msg.ch);
+        #ifdef USART_ECHO
+        printf("%c",rx_msg.ch);
+        #endif
 
         if(!xQueueSendToBackFromISR(serial_rx_queue, &rx_msg, &lHigherPriorityTaskWoken) ) {
             portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
