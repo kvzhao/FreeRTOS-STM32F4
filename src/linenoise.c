@@ -36,7 +36,7 @@ char **history = NULL;
 
 
 void linenoiseClearScreen(void) {
-    putstr("\x1b[H\x1b[2J");
+    printf("\x1b[H\x1b[2J");
 }
 
 static void freeCompletions(linenoiseCompletions *lc) {
@@ -48,7 +48,7 @@ static void freeCompletions(linenoiseCompletions *lc) {
 }
 
 static void linenoiseBeep(void) {
-    putstr("\x7");
+    printf("\x7");
 }
 
 static int completeLine(struct linenoiseState *ls) {
@@ -138,18 +138,18 @@ static void refreshSingleLine(struct linenoiseState *l) {
     }
 
     /* Cursor to left edge */
-    putstr("\x1b[0G");
+    printf("\x1b[0G");
     /* Write the prompt and the current buffer content */
-    putstr(l->prompt);
-    putstr(buf);
+    printf(l->prompt);
+    printf(buf);
     /* Erase to right */
-    putstr("\x1b[0K");
+    printf("\x1b[0K");
     /* Move cursor to original position. */
     char sq[] = "\x1b[0G\x1b[00C"; //the max columes of Terminal environment is 80
     /* Set the count of moving cursor */
     sq[6] = (pos+plen) / 10 + 0x30;
     sq[7] = (pos+plen) % 10 + 0x30;
-    putstr(sq);
+    printf(sq);
 }
 
 static void refreshLine(struct linenoiseState *l) {
@@ -275,7 +275,7 @@ static int linenoiseEdit(char *buf, size_t buflen, const char *prompt)
      * initially is just an empty string. */
     linenoiseHistoryAdd("");
 
-    putstr(prompt);
+    printf(prompt);
     while(1) {
     	char c;
     	char seq[2] = {0};
@@ -387,7 +387,7 @@ static int linenoiseRaw(char *buf, size_t buflen, const char *prompt) {
     int count;
 
     count = linenoiseEdit(buf, buflen, prompt);
-    putstr("\n\r");
+    printf("\n\r");
 
     return count;
 }
