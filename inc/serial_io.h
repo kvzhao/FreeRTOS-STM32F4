@@ -1,8 +1,7 @@
 #ifndef SERIAL_IO_H
 #define SERIAL_IO_H
 
-//#include "queue.h"
-//#include "semphr.h"
+#define PRINT_DEBUG(var1) printf("DEBUG PRINT"#var1"\r\n")
 
 #define MAX_STRLEN 12
 extern volatile char received_string[];
@@ -22,8 +21,5 @@ void Serial_Configuration(void);
 
 int putstr(const char *msg);
 int getstr(void);
-
-//extern xSemaphoreHandle serial_tx_wait_sem;
-//extern xQueueHandle serial_rx_queue;
 
 #endif
