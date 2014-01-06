@@ -29,13 +29,10 @@ int main(void) {
   vSemaphoreCreateBinary(serial_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
 
-  // ret = xTaskCreate(test_FPU_test, "FPU", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  // ret = xTaskCreate(test_servo_task, "SERVO", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-  // ret = xTaskCreate(null_task, "Null Task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
           2048, NULL,
-          tskIDLE_PRIORITY +2, NULL);
+          tskIDLE_PRIORITY +5, NULL);
 
   if (ret == pdTRUE) {
     printf("System Started!\n\r");
