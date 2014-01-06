@@ -85,8 +85,9 @@ void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
 void shell_help(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
 	myprintf("\n\rLinenoise shell environment>\n\r");
-	myprintf("The lineoise is auorized under BSD License and released by antirez\n\r");
-	myprintf("The QCopterFlightControl is based on Hom19910422's version\n\r");
+	myprintf("The lineoise is authorized under BSD License and released by antirez.\n\r");
+	myprintf("The QCopterFlightControl is based on Hom19910422's version.\n\r");
+    myprintf("The Robot Controller is edited by kvzhao.\r\n");
 
 	myprintf("\n\rSupport commands:\n\r");
 	myprintf("clear  \tClear the screan\n\r");
