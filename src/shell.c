@@ -50,7 +50,7 @@ void shell_linenoise_completion(const char *buf, linenoiseCompletions *lc)
 void shell_task()
 {
 	/* Clear the screen */
-//    myprintf("\x1b[H\x1b[2J");
+    myprintf("\x1b[H\x1b[2J");
 	/* Show the prompt messages */
     myprintf("[System status]Initialized successfully!\n\r");
 
@@ -62,6 +62,7 @@ void shell_task()
 		char *shell_str = linenoise("Shell > ");
 
 		if(shell_str == NULL) {
+            myprintf("Can't receive the command.\r\n");
 			continue;
         }
 
