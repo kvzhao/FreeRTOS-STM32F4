@@ -50,10 +50,9 @@ void shell_linenoise_completion(const char *buf, linenoiseCompletions *lc)
 void shell_task()
 {
 	/* Clear the screen */
-    printf("\x1b[H\x1b[2J");
+//    myprintf("\x1b[H\x1b[2J");
 	/* Show the prompt messages */
-    printf("[System status]Initialized successfully!\n\r");
-    printf("Please type \"help\" to get more informations\n\r");
+    myprintf("[System status]Initialized successfully!\n\r");
 
 	while (1) {
 		linenoiseSetCompletionCallback(shell_linenoise_completion);
@@ -62,8 +61,9 @@ void shell_task()
 
 		char *shell_str = linenoise("Shell > ");
 
-		if(shell_str == NULL)
+		if(shell_str == NULL) {
 			continue;
+        }
 
 		commandExec(shell_str, &shell_cd, shellCmd_list, SHELL_CMD_CNT);
 
@@ -73,7 +73,7 @@ void shell_task()
 /**** Customize command function ******************************************************/
 void shell_unknown_cmd(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
-	printf("Command not found\n\r");
+	myprintf("Command not found\n\r");
 }
 
 void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
@@ -83,14 +83,14 @@ void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
 
 void shell_help(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
-	printf("\n\rLinenoise shell environment>\n\r");
-	printf("The lineoise is auorized under BSD License and released by antirez\n\r");
-	printf("The QCopterFlightControl is based on Hom19910422's version\n\r");
+	myprintf("\n\rLinenoise shell environment>\n\r");
+	myprintf("The lineoise is auorized under BSD License and released by antirez\n\r");
+	myprintf("The QCopterFlightControl is based on Hom19910422's version\n\r");
 
-	printf("\n\rSupport commands:\n\r");
-	printf("clear  \tClear the screan\n\r");
-	printf("help \tShow the list of all commands\n\r");
-	printf("ps \tShow the list of all tasks\n\r\n\r");
+	myprintf("\n\rSupport commands:\n\r");
+	myprintf("clear  \tClear the screan\n\r");
+	myprintf("help \tShow the list of all commands\n\r");
+	myprintf("ps \tShow the list of all tasks\n\r\n\r");
 }
 
 void shell_ps(char parameter[][MAX_CMD_LEN], int par_cnt)
@@ -99,8 +99,8 @@ void shell_ps(char parameter[][MAX_CMD_LEN], int par_cnt)
 
 	vTaskList(buf);
 
-	//TODO:replace the hardcode by using sprintf()
-	printf("\n\rName          State   Priority  Stack Num\n\r");
-	printf("*****************************************\n\r");
-	printf("%s\n\r", buf);
+	//TODO:replace the hardcode by using smyprintf()
+	myprintf("\n\rName          State   Priority  Stack Num\n\r");
+	myprintf("*****************************************\n\r");
+	myprintf("%s\n\r", buf);
 }
