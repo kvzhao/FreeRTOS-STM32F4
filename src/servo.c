@@ -59,7 +59,7 @@ void Servo_Configuration()
     TIM4_PWM_Configuration();
 }
 
-void Servo_set_pos (uint8_t angle, uint8_t ch)
+void servo_set_pos (uint8_t angle, uint8_t ch)
 {
     uint32_t cval = TIM4->ARR / (10 + 10*angle/180);
     switch (ch) {

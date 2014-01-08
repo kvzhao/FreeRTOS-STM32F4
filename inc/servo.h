@@ -9,6 +9,6 @@
 #define SERVO_180  2
 
 void Servo_Configuration();
-void Servo_set_pos(uint8_t angle /* degree */, uint8_t ch);
+void servo_set_pos(uint8_t angle /* degree */, uint8_t ch);
 
 #endif
