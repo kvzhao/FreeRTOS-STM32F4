@@ -26,10 +26,11 @@
 #include "stm32f4xx_it.h"
 #include "stdint.h"
 #include "serial_io.h"
+#include "usart_com.h"
 #include "sys_manager.h"
 
 //#define USART_ECHO
-extern volatile char received_string[];
+extern volatile char received_cmd[];
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -180,11 +181,16 @@ void USART1_IRQHandler(void) {
         /* check if the received character is not the LF character (used to determine end of string)
         * or the if the maximum string length has been been reached
         */
-        if( (t != 'n') && (cnt < MAX_STRLEN) ){
-            received_string[cnt] = t;
+        if( (t != 'n') && (cnt < MAX_CMD_LEN) ){
+            received_cmd[cnt] = t;
+            /* Echo Test */
+        #ifdef USART_ECHO
+            command_send (USART1, t);
+        #endif
             cnt++;
         } else{ // otherwise reset the character counter and print the received string
             cnt = 0;
+            command_send (USART1, received_cmd);
         }
     }
 }
