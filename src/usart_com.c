@@ -1,6 +1,6 @@
 #include "usart_com.h"
 
-volatile char received_cmd[MAX_CMD_LEN+1]; // this will hold the recieved string
+volatile char received_cmd[CMD_LEN+1]; // this will hold the recieved string
 
 /* This funcion initializes the USART1 peripheral
  *

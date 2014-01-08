@@ -181,7 +181,7 @@ void USART1_IRQHandler(void) {
         /* check if the received character is not the LF character (used to determine end of string)
         * or the if the maximum string length has been been reached
         */
-        if( (t != 'n') && (cnt < MAX_CMD_LEN) ){
+        if( (t != 'n') && (cnt < CMD_LEN) ){
             received_cmd[cnt] = t;
             /* Echo Test */
         #ifdef USART_ECHO
