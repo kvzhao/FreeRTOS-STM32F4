@@ -52,7 +52,7 @@ void shell_task()
 	/* Clear the screen */
     myprintf("\x1b[H\x1b[2J");
 	/* Show the prompt messages */
-    myprintf("[System status]Initialized successfully!\n\r");
+    myprintf("[System status] Initialized successfully!\n\r");
 
 	while (1) {
 		linenoiseSetCompletionCallback(shell_linenoise_completion);
@@ -85,8 +85,6 @@ void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
 void shell_help(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
 	myprintf("\n\rLinenoise shell environment>\n\r");
-	myprintf("The lineoise is auorized under BSD License and released by antirez\n\r");
-	myprintf("The QCopterFlightControl is based on Hom19910422's version\n\r");
 
 	myprintf("\n\rSupport commands:\n\r");
 	myprintf("clear  \tClear the screan\n\r");
