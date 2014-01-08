@@ -33,11 +33,11 @@ int main(void) {
           2048, NULL,
           tskIDLE_PRIORITY +5, NULL);
 
-  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 256, NULL, tskIDLE_PRIORITY +3, NULL);
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +3, NULL);
 
 
   if (ret == pdTRUE) {
-    my_printf("System Started!\n\r");
+    //my_printf("System Started!\n\r");
     vTaskStartScheduler();  // should never return
   } else {
     my_printf("System Error!\n");
