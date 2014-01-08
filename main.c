@@ -9,6 +9,7 @@
 
 #include "servo.h"
 #include "serial_io.h"
+#include "usart_com.h"
 #include "sys_manager.h"
 #include "shell.h"
 
@@ -25,6 +26,7 @@ int main(void) {
 
   Serial_Configuration();
   Servo_Configuration();
+  USART1_COM_Configuration(57600);
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));

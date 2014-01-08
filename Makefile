@@ -47,6 +47,7 @@ SRC += memory.c
 SRC += shell.c
 SRC += parser.c
 SRC += linenoise.c
+SRC += usart_com.c
 
 # FreeRTOS Source Files
 SRC+=port.c
