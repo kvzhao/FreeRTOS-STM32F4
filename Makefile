@@ -1,4 +1,4 @@
-TARGET:=FreeRTOS
+TARGET:=RobotARM_Controller
 # TODO change to your ARM gcc toolchain path
 TOOLCHAIN_ROOT:=/usr
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
