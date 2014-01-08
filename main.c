@@ -3,7 +3,6 @@
 #include "task.h"
 #include "queue.h"
 
-#include "math.h"
 #include "stdio.h"
 #include "stm32f4xx_usart.h"
 
@@ -12,11 +11,9 @@
 #include "usart_com.h"
 #include "sys_manager.h"
 #include "shell.h"
+#include "unit_test.h"
 
-void USART3_Configuration(void);
 void null_task(void *p);
-void test_FPU_test(void* p);
-void test_servo_task(void* p);
 
 int main(void) {
   uint8_t ret;
@@ -36,11 +33,14 @@ int main(void) {
           2048, NULL,
           tskIDLE_PRIORITY +5, NULL);
 
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 256, NULL, tskIDLE_PRIORITY +3, NULL);
+
+
   if (ret == pdTRUE) {
-    printf("System Started!\n\r");
+    my_printf("System Started!\n\r");
     vTaskStartScheduler();  // should never return
   } else {
-    printf("System Error!\n");
+    my_printf("System Error!\n");
     // --TODO blink some LEDs to indicate fatal system error
   }
 
@@ -94,36 +94,3 @@ void null_task(void *pvTaskParameters)
     vTaskDelete(NULL);
 }
 
-void test_FPU_test(void* p) {
-  float ff = 1.0f;
-  printf("Start FPU test task.\n");
-  for (;;) {
-    float s = sinf(ff);
-    ff += s;
-    // TODO some other test
-    vTaskDelay(1000);
-  }
-  vTaskDelete(NULL);
-}
-
-void test_servo_task(void *pvTaskParameters)
-{
-    printf("Start Servo test task.\n\t");
-    while(1) {
-        Servo_set_pos(60,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(120,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(60,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(180,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-    }
-}
