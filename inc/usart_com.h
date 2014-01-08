@@ -6,7 +6,7 @@
 #include "stm32f4xx_usart.h" // under Libraries/STM32F4xx_StdPeriph_Driver/inc and src
 
 #define MAX_CMD_LEN 6 // this is the maximum string length of our string in characters
-extern volatile char received_cmd[MAX_CMD_LEN+1]; // this will hold the recieved string
+extern volatile char received_cmd[]; // this will hold the recieved string
 
 void USART1_COM_Configuration(uint32_t baudrate);
 void command_send (USART_TypeDef* USARTx, volatile char *s);
