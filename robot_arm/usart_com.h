@@ -8,7 +8,20 @@
 #define CMD_LEN 6 // this is the maximum string length of our string in characters
 extern volatile char received_cmd[]; // this will hold the recieved string
 
+typedef struct {
+    char ch;
+} com_msg;
+
+typedef struct {
+    char (*getch)();
+    void (*putch)(char c);
+} com_ops;
+
+extern com_ops com;
+
 void USART1_COM_Configuration(uint32_t baudrate);
-void command_send (USART_TypeDef* USARTx, volatile char *s);
+
+int get_command();
+int response(const char*);
 
 #endif

@@ -25,12 +25,15 @@
 #include "stm32f4xx_usart.h"
 #include "stm32f4xx_it.h"
 #include "stdint.h"
+
+#include "arm.h"
 #include "serial_io.h"
 #include "usart_com.h"
 #include "sys_manager.h"
 
-//#define USART_ECHO
+#define USART_ECHO 1
 extern volatile char received_cmd[];
+extern char isReceive_move_req;
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -172,26 +175,23 @@ void USART3_IRQHandler(void) {
 // this is the interrupt request handler (IRQ) for ALL USART1 interrupts
 void USART1_IRQHandler(void) {
 
-    // check if the USART1 receive interrupt flag was set
-    if( USART_GetITStatus(USART1, USART_IT_RXNE) ){
+    char ch;
+    long lHigherPriorityTaskWoken = pdFALSE;
 
-        static uint8_t cnt = 0; // this counter is used to determine the string length
-        char t = USART1->DR; // the character from the USART1 data register is saved in t
+    if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET) {
+        xSemaphoreGiveFromISR(com_tx_wait_sem, &lHigherPriorityTaskWoken);
+        USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+    } else if( USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
 
-        /* check if the received character is not the LF character (used to determine end of string)
-        * or the if the maximum string length has been been reached
-        */
-        if( (t != 'n') && (cnt < CMD_LEN) ){
-            received_cmd[cnt] = t;
-            /* Echo Test */
-        #ifdef USART_ECHO
-            command_send (USART1, t);
-        #endif
-            cnt++;
-        } else{ // otherwise reset the character counter and print the received string
-            cnt = 0;
-            command_send (USART1, received_cmd);
+        ch = USART_ReceiveData(USART1);
+
+        // Revise here
+        if(!xQueueSendToBackFromISR(com_rx_queue, &ch, &lHigherPriorityTaskWoken) ) {
+            portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
         }
+
+    } else {
+            while(1); // Halt
     }
 }
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

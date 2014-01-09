@@ -1,4 +1,8 @@
 #include "usart_com.h"
+#include "sys_manager.h"
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "semphr.h"
 
 volatile char received_cmd[CMD_LEN+1]; // this will hold the recieved string
 
@@ -69,8 +73,10 @@ void USART1_COM_Configuration(uint32_t baudrate) {
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); // enable the USART1 receive interrupt
 
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;		 // we want to configure the USART1 interrupts
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// this sets the priority group of the USART1 interrupts
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		 // this sets the subpriority inside the group
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY ;
+    // this sets the priority group of the USART3 interrupts
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      // this sets the subpriority inside the group
+
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			 // the USART1 interrupts are globally enabled
 	NVIC_Init(&NVIC_InitStructure);							 // the properties are passed to the NVIC_Init function which takes care of the low level stuff
 
@@ -78,25 +84,39 @@ void USART1_COM_Configuration(uint32_t baudrate) {
 	USART_Cmd(USART1, ENABLE);
 }
 
-/* This function is used to transmit a string of characters via
- * the USART specified in USARTx.
- *
- * It takes two arguments: USARTx --> can be any of the USARTs e.g. USART1, USART2 etc.
- * 						   (volatile) char *s is the string you want to send
- *
- * Note: The string has to be passed to the function as a pointer because
- * 		 the compiler doesn't know the 'string' data type. In standard
- * 		 C a string is just an array of characters
- *
- * Note 2: At the moment it takes a volatile char because the cmd variable
- * 		   declared as volatile char --> otherwise the compiler will spit out warnings
- * */
-void command_send (USART_TypeDef* USARTx, volatile char *s){
 
-	while(*s){
-		// wait until data register is empty
-		while( !(USARTx->SR & 0x00000040) );
-		USART_SendData(USARTx, *s);
-		*s++;
-	}
+static char getch_usart1()
+{
+    com_msg msg;
+    while(!xQueueReceive(com_rx_queue, &msg, portMAX_DELAY));
+    return msg.ch;
 }
+
+static void putch_usart1(char c)
+{
+    while(!xSemaphoreTake(com_tx_wait_sem, portMAX_DELAY));
+    USART_SendData(USART1, (uint16_t)c);
+    USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+}
+
+
+int response(const char *msg)
+{
+    for(;*msg;++msg)
+        com.putch(*msg);
+    return 1;
+}
+
+int get_command(void)
+{
+    char str;
+    str = com.getch();
+    putstr(&str);
+    return 1;
+}
+
+/* Serial read/write callback functions */
+com_ops com = {
+    .getch = getch_usart1,
+    .putch = putch_usart1,
+};

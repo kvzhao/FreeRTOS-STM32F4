@@ -20,6 +20,7 @@ INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
 INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
 INCLUDE+=-I$(CURDIR)/unit_test
+INCLUDE+=-I$(CURDIR)/robot_arm
 INCLUDE+=-I$(CURDIR)/inc
 
 BUILD_DIR = $(CURDIR)/build
@@ -30,6 +31,7 @@ BIN_DIR = $(CURDIR)/binary
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
 		  $(CURDIR)/unit_test \
+		  $(CURDIR)/robot_arm \
 		  $(CURDIR)/src \
           $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
@@ -51,6 +53,7 @@ SRC += parser.c
 SRC += linenoise.c
 SRC += usart_com.c
 SRC += unit_test.c
+SRC += arm.c
 
 # FreeRTOS Source Files
 SRC+=port.c

@@ -13,6 +13,10 @@
 #include "shell.h"
 #include "unit_test.h"
 
+#include "arm.h"
+
+#define UNIT_TEST 0
+
 void null_task(void *p);
 
 int main(void) {
@@ -32,9 +36,14 @@ int main(void) {
           (signed portCHAR *)"Shell",
           2048, NULL,
           tskIDLE_PRIORITY +5, NULL);
+#if UNIT_TEST
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +4, NULL);
+#endif
 
-  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +3, NULL);
-
+  ret = xTaskCreate(arm_task,
+          (signed portCHAR *)"Robot Arm Control",
+          512, NULL,
+          tskIDLE_PRIORITY +3, NULL);
 
   if (ret == pdTRUE) {
     //my_printf("System Started!\n\r");
