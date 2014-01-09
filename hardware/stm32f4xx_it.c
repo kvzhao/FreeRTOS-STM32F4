@@ -31,9 +31,7 @@
 #include "usart_com.h"
 #include "sys_manager.h"
 
-#define USART_ECHO 1
-extern volatile char received_cmd[];
-extern char isReceive_move_req;
+#define USART_ECHO 0
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

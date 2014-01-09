@@ -9,7 +9,6 @@
 #include "servo.h"
 #include "arm.h"
 
-char isReceive_move_req = FALSE;
 extern volatile char received_cmd[]; // this will hold the recieved string
 
 int angle, ret;
@@ -73,16 +72,8 @@ void arm_task(void *pvParameters)
             // For debug
             response(received_cmd);
             cnt = 0;
+            execute_command(received_cmd);
         }
 
-/*
-        if (isReceive_move_req) {
-
-            execute_command(received_cmd);
-
-        } // End of executing one commnad
-            // Complete one command, put down the flag
-       isReceive_move_req = FALSE;
-       */
     }
 }
