@@ -175,7 +175,7 @@ void USART3_IRQHandler(void) {
 // this is the interrupt request handler (IRQ) for ALL USART1 interrupts
 void USART1_IRQHandler(void) {
 
-    char ch;
+    com_msg rx_msg;
     long lHigherPriorityTaskWoken = pdFALSE;
 
     if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET) {
@@ -183,15 +183,15 @@ void USART1_IRQHandler(void) {
         USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
     } else if( USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
 
-        ch = USART_ReceiveData(USART1);
+        rx_msg.ch  = USART_ReceiveData(USART1);
 
-        // Revise here
-        if(!xQueueSendToBackFromISR(com_rx_queue, &ch, &lHigherPriorityTaskWoken) ) {
+        if(!xQueueSendToBackFromISR(com_rx_queue, &rx_msg, &lHigherPriorityTaskWoken) ) {
             portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
         }
 
     } else {
             while(1); // Halt
     }
+    portEND_SWITCHING_ISR(lHigherPriorityTaskWoken);
 }
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

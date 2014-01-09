@@ -63,9 +63,18 @@ void execute_command(char cmd[CMD_LEN+1])
 
 void arm_task(void *pvParameters)
 {
+    // Command counter
+    uint8_t cnt = 0;
 
     while (1) {
-        response("ok!\r\n");
+        if ( cnt < CMD_LEN ) {
+            received_cmd[cnt++] = com.getch();
+        } else {
+            // For debug
+            response(received_cmd);
+            cnt = 0;
+        }
+
 /*
         if (isReceive_move_req) {
 

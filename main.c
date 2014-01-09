@@ -14,6 +14,7 @@
 #include "unit_test.h"
 
 #include "arm.h"
+#include "usart_com.h"
 
 #define UNIT_TEST 0
 
@@ -30,20 +31,23 @@ int main(void) {
   USART1_COM_Configuration(57600);
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
+  vSemaphoreCreateBinary(com_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
+  com_rx_queue = xQueueCreate(1, sizeof(com_msg));
+
+  ret = xTaskCreate(arm_task,
+          (signed portCHAR *)"Arm",
+          512, NULL,
+          tskIDLE_PRIORITY +5, NULL);
 
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
           2048, NULL,
-          tskIDLE_PRIORITY +5, NULL);
+          tskIDLE_PRIORITY +3, NULL);
+
 #if UNIT_TEST
   ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +4, NULL);
 #endif
-
-  ret = xTaskCreate(arm_task,
-          (signed portCHAR *)"Robot Arm Control",
-          512, NULL,
-          tskIDLE_PRIORITY +3, NULL);
 
   if (ret == pdTRUE) {
     //my_printf("System Started!\n\r");
@@ -83,8 +87,7 @@ void vApplicationMallocFailedHook(void) {
    important that vApplicationIdleHook() is permitted to return to its calling
    function, because it is the responsibility of the idle task to clean up
    memory allocated by the kernel to any task that has since been deleted. */
-void vApplicationIdleHook(void) {
-}
+//void vApplicationIdleHook(void) {}
 
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName) {
   (void) pcTaskName;

@@ -71,14 +71,16 @@ void USART1_COM_Configuration(uint32_t baudrate) {
 	 * if the USART1 receive interrupt occurs
 	 */
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); // enable the USART1 receive interrupt
+    USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
 
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;		 // we want to configure the USART1 interrupts
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY ;
-    // this sets the priority group of the USART3 interrupts
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY+1 ;
+    // this sets the priority group of the USART1 interrupts
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      // this sets the subpriority inside the group
 
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			 // the USART1 interrupts are globally enabled
 	NVIC_Init(&NVIC_InitStructure);							 // the properties are passed to the NVIC_Init function which takes care of the low level stuff
+
 
 	// finally this enables the complete USART1 peripheral
 	USART_Cmd(USART1, ENABLE);
