@@ -102,7 +102,7 @@ static void putch_usart1(char c)
 }
 
 
-int response(const char *msg)
+int com_echo(const char *msg)
 {
     for(;*msg;++msg)
         com.putch(*msg);

@@ -21,6 +21,6 @@ extern com_ops com;
 
 void USART1_COM_Configuration(uint32_t baudrate);
 
-int response(const char*);
+int com_echo(const char*);
 
 #endif
