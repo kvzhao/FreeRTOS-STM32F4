@@ -16,7 +16,7 @@
 #include "arm.h"
 #include "usart_com.h"
 
-#define UNIT_TEST 0
+#define UNIT_TEST 1
 
 void null_task(void *p);
 
@@ -38,7 +38,7 @@ int main(void) {
   ret = xTaskCreate(arm_task,
           (signed portCHAR *)"Arm",
           512, NULL,
-          tskIDLE_PRIORITY +5, NULL);
+          tskIDLE_PRIORITY +4, NULL);
 
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
@@ -46,7 +46,7 @@ int main(void) {
           tskIDLE_PRIORITY +3, NULL);
 
 #if UNIT_TEST
-  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +4, NULL);
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +5, NULL);
 #endif
 
   if (ret == pdTRUE) {
