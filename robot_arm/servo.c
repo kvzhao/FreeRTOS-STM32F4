@@ -16,8 +16,8 @@ void TIM4_PWM_Configuration()
 
     TIM_TimeBaseStructInit( &TIM_TimeBaseInitStruct );
     TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV4;
-    TIM_TimeBaseInitStruct.TIM_Period = 3360 - 1;
-    TIM_TimeBaseInitStruct.TIM_Prescaler = 500 - 1;
+    TIM_TimeBaseInitStruct.TIM_Period = 3600 - 1;
+    TIM_TimeBaseInitStruct.TIM_Prescaler = 447- 1;
     TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseInit( TIM4, &TIM_TimeBaseInitStruct );
 
@@ -61,19 +61,18 @@ void Servo_Configuration()
 
 void servo_set_pos (uint8_t ch, uint8_t angle)
 {
-    uint32_t cval = TIM4->ARR / (10 + 10*angle/180);
     switch (ch) {
         case 0:
-            TIM4->CCR1 = cval;
+            TIM4->CCR1 = SERVO_0 + angle;
             break;
         case 1:
-            TIM4->CCR2 = cval;
+            TIM4->CCR2 = SERVO_0 + angle;
             break;
         case 2:
-            TIM4->CCR3 = cval;
+            TIM4->CCR3 = SERVO_0 + angle;
             break;
         case 3:
-            TIM4->CCR4 = cval;
+            TIM4->CCR4 = SERVO_0 +angle;
             break;
     }
     vTaskDelay(50);
