@@ -48,13 +48,13 @@ void execute_command(char cmd[CMD_LEN+1])
         ret = move (node_num, angle);
 
         if (ret) {
-            response("moving");
+            com_echo("moving\r\n");
         } else {
-            response("bad command");
+            com_echo("bad command\r\n");
         }
 
         /* for debug, show the received cmd */
-        my_printf("Move node %d, to angle %d.\r\n", node_num, angle);
+        my_printf("[arm_task] Move node %d, to angle %d.\r\n", node_num, angle);
 
     } // End of format check
 
@@ -64,13 +64,14 @@ void arm_task(void *pvParameters)
 {
     // Command counter
     uint8_t cnt = 0;
+    char t;
 
     while (1) {
         if ( cnt < CMD_LEN ) {
-            received_cmd[cnt++] = com.getch();
+            t = com.getch();
+            if ( t >= 0x21 && t <= 0x7E )
+                received_cmd[cnt++]= t;
         } else {
-            // For debug
-            response(received_cmd);
             cnt = 0;
             execute_command(received_cmd);
         }
