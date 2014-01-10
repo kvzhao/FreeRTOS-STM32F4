@@ -17,7 +17,6 @@ int base_cur_angle;
 // goal : move (node, dir, deg)
 int move (arm_node_t node, int8_t angle)
 {
-    servo_set_pos(node, angle);
     /* Chose the node*/
     switch (node)
     {
@@ -30,7 +29,10 @@ int move (arm_node_t node, int8_t angle)
     break;
     case WRIST:
     break;
-    case GRIPPER:
+    case WAVER:
+        if ( angle <= WAVER_MAX && angle >= WAVER_MIN ) {
+            servo_set_pos(node, angle);
+        }
     break;
     default :
         return -1;
@@ -78,3 +80,8 @@ void arm_task(void *pvParameters)
 
     }
 }
+
+void robot_arm_initialization()
+{}
+
+
