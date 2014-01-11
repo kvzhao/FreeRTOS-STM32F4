@@ -62,9 +62,11 @@ void Servo_Configuration()
 
 void servo_set_pos (uint8_t ch, uint16_t angle)
 {
+    int cval = SERVO_0 + 1700*angle /1000;
     switch (ch) {
         case 0:
-            TIM4->CCR1 = SERVO_0 + 2*angle;
+            //TIM4->CCR1 = SERVO_0 + 2*angle;
+            TIM4->CCR1 = cval;
             break;
         case 1:
             TIM4->CCR2 = SERVO_0 + angle;
