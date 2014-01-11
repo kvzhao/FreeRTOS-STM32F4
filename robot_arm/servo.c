@@ -69,13 +69,13 @@ void servo_set_pos (uint8_t ch, uint16_t angle)
             TIM4->CCR1 = cval;
             break;
         case 1:
-            TIM4->CCR2 = SERVO_0 + angle;
+            TIM4->CCR2 = cval;
             break;
         case 2:
-            TIM4->CCR3 = SERVO_0 + angle;
+            TIM4->CCR3 = cval;
             break;
         case 3:
-            TIM4->CCR4 = SERVO_0 +angle;
+            TIM4->CCR4 = cval;
             break;
     }
     vTaskDelay(50);
