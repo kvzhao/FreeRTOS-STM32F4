@@ -1,6 +1,8 @@
 #ifndef __ARM_H__
 #define __ARM_H__
 
+#include <stdint.h>
+
 // Angle Constraints and Initial Value
 #define BASE_MIN 0
 #define BASE_MAX 180
@@ -23,7 +25,7 @@ typedef enum {
 
 // A flag indicate receiving move arm request
 void execute_command(char cmd[]);
-int move (arm_node_t node, int8_t angle);
+int move (arm_node_t node, uint8_t angle);
 void arm_task(void *pv);
 
 void robot_arm_initialization();

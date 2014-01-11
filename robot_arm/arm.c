@@ -15,7 +15,7 @@ int angle, ret;
 int base_cur_angle;
 
 // goal : move (node, dir, deg)
-int move (arm_node_t node, int8_t angle)
+int move (arm_node_t node, uint8_t angle)
 {
     /* Chose the node*/
     switch (node)
@@ -82,6 +82,9 @@ void arm_task(void *pvParameters)
 }
 
 void robot_arm_initialization()
-{}
+{
+  Servo_Configuration();
+  USART1_COM_Configuration(57600);
+}
 
 
