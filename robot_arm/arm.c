@@ -15,7 +15,8 @@ int angle, ret;
 int base_cur_angle;
 
 uint8_t base_init = 90;
-uint8_t wrist_init = 90;
+uint8_t elbow_init = 170;
+uint8_t wrist_init = 120;
 uint8_t waver_init = 90;
 
 char op_flag = FALSE;
@@ -41,6 +42,7 @@ int move (arm_node_t node, uint8_t angle)
     default :
         return -1;
     } // End of switch
+    vTaskDelay(100);
     return 1;
 }
 
@@ -74,6 +76,7 @@ void arm_task(void *pvParameters)
 
     arm_op_queue = xQueueCreate(1, sizeof(op_flag));
 
+    arm_set_origin_pos();
     while (1) {
         if ( cnt < CMD_LEN ) {
             t = com.getch();
@@ -83,7 +86,6 @@ void arm_task(void *pvParameters)
             cnt = 0;
             execute_command(received_cmd);
         }
-
         xQueueSend(arm_op_queue, &op_flag, (portTickType)10);
     }
 }
@@ -94,4 +96,11 @@ void robot_arm_initialization()
   USART1_COM_Configuration(57600);
 }
 
+void arm_set_origin_pos()
+{
+    move (BASE, base_init);
+    move (ELBOW, elbow_init);
+    move (WRIST, wrist_init);
+    move (WAVER, waver_init);
+}
 

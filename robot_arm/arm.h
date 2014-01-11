@@ -7,6 +7,12 @@
 #define BASE_MIN 0
 #define BASE_MAX 180
 
+#define ELBOW_MIN 90
+#define ELBOW_MAX 175
+
+#define WRIST_MIN 90
+#define WRIST_MAX 175
+
 #define WAVER_MIN 0
 #define WAVER_MAX 180
 
@@ -14,6 +20,7 @@
 #define FALSE 0
 
 extern char op_flag;
+
 
 typedef enum {
     BASE = 0,
