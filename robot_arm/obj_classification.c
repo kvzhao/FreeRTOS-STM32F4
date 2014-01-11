@@ -24,9 +24,29 @@ void grab_obj (obj_t type)
 }
 void approach()
 {
+    int i;
+    uint8_t elbow_curr = 170;
+    uint8_t wrist_curr = 120;
+    for (i=0; i < 42; i++)
+    {
+        elbow_curr-=2;
+        wrist_curr-=1;
+        move (ELBOW, elbow_curr);
+        move (WRIST, wrist_curr);
+    }
 }
 void withdraw()
 {
+    int i;
+    uint8_t elbow_curr = 86;
+    uint8_t wrist_curr = 78;
+    for (i=0; i < 42; i++)
+    {
+        elbow_curr+=2;
+        wrist_curr+=1;
+        move (ELBOW, elbow_curr);
+        move (WRIST, wrist_curr);
+    }
 }
 
 void arm_operate_task(void *pv)
