@@ -6,14 +6,14 @@
 // Angle Constraints and Initial Value
 #define BASE_MIN 0
 #define BASE_MAX 180
-#define BASE_INIT 90
-
-#define ELBOW_INIT 90
-#define WRIST_INIT 90
 
 #define WAVER_MIN 0
 #define WAVER_MAX 180
-#define WAVER_INIT 90
+
+#define TRUE 1
+#define FALSE 0
+
+extern char op_flag;
 
 typedef enum {
     BASE = 0,

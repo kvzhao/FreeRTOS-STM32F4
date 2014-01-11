@@ -14,9 +14,10 @@
 #include "unit_test.h"
 
 #include "arm.h"
+#include "obj_classification.h"
 #include "usart_com.h"
 
-#define UNIT_TEST 1
+#define UNIT_TEST 0
 
 void null_task(void *p);
 
@@ -27,26 +28,28 @@ int main(void) {
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
   Serial_Configuration();
-  Servo_Configuration();
-  USART1_COM_Configuration(57600);
+  robot_arm_initialization();
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
   vSemaphoreCreateBinary(com_tx_wait_sem);
+
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
   com_rx_queue = xQueueCreate(1, sizeof(com_msg));
 
   ret = xTaskCreate(arm_task,
           (signed portCHAR *)"Arm",
           512, NULL,
-          tskIDLE_PRIORITY +4, NULL);
+          tskIDLE_PRIORITY +5, NULL);
 
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
           2048, NULL,
           tskIDLE_PRIORITY +3, NULL);
 
+  ret = xTaskCreate(arm_operate_task, (signed portCHAR *)"Operation", 256, NULL, tskIDLE_PRIORITY +1, NULL);
+
 #if UNIT_TEST
-  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +5, NULL);
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +4, NULL);
 #endif
 
   if (ret == pdTRUE) {

@@ -14,6 +14,12 @@ extern volatile char received_cmd[]; // this will hold the recieved string
 int angle, ret;
 int base_cur_angle;
 
+uint8_t base_init = 90;
+uint8_t wrist_init = 90;
+uint8_t waver_init = 90;
+
+char op_flag = FALSE;
+
 // goal : move (node, dir, deg)
 int move (arm_node_t node, uint8_t angle)
 {
@@ -21,18 +27,16 @@ int move (arm_node_t node, uint8_t angle)
     switch (node)
     {
     case BASE:
-        if ( angle <= BASE_MAX && angle >= BASE_MIN ) {
             servo_set_pos(node, angle);
-        }
     break;
-    case ELBOW:
+   case ELBOW:
+            servo_set_pos(node, angle);
     break;
     case WRIST:
+            servo_set_pos(node, angle);
     break;
     case WAVER:
-        if ( angle <= WAVER_MAX && angle >= WAVER_MIN ) {
             servo_set_pos(node, angle);
-        }
     break;
     default :
         return -1;
@@ -68,6 +72,8 @@ void arm_task(void *pvParameters)
     uint8_t cnt = 0;
     char t;
 
+    arm_op_queue = xQueueCreate(1, sizeof(op_flag));
+
     while (1) {
         if ( cnt < CMD_LEN ) {
             t = com.getch();
@@ -78,6 +84,7 @@ void arm_task(void *pvParameters)
             execute_command(received_cmd);
         }
 
+        xQueueSend(arm_op_queue, &op_flag, (portTickType)10);
     }
 }
 

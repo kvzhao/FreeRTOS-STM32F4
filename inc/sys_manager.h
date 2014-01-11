@@ -24,4 +24,5 @@ extern xSemaphoreHandle serial_tx_wait_sem;
 extern xQueueHandle com_rx_queue;
 extern xSemaphoreHandle com_tx_wait_sem;
 
+extern xQueueHandle arm_op_queue;
 #endif
