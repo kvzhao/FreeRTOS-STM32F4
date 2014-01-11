@@ -54,6 +54,7 @@ SRC += linenoise.c
 SRC += usart_com.c
 SRC += unit_test.c
 SRC += arm.c
+SRC += obj_classification.c
 
 # FreeRTOS Source Files
 SRC+=port.c
