@@ -14,6 +14,7 @@ void TIM4_PWM_Configuration()
     // Let period equal 1000. Therefore, timer runs from zero to 1000. Gives 0.1Hz resolution.
     // Solving for prescaler gives 240.
 
+    // TIM is 84 MHz
     TIM_TimeBaseStructInit( &TIM_TimeBaseInitStruct );
     TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV4;
     TIM_TimeBaseInitStruct.TIM_Period = 3600 - 1;
@@ -59,11 +60,11 @@ void Servo_Configuration()
     TIM4_PWM_Configuration();
 }
 
-void servo_set_pos (uint8_t ch, uint8_t angle)
+void servo_set_pos (uint8_t ch, uint16_t angle)
 {
     switch (ch) {
         case 0:
-            TIM4->CCR1 = SERVO_0 + angle;
+            TIM4->CCR1 = SERVO_0 + 2*angle;
             break;
         case 1:
             TIM4->CCR2 = SERVO_0 + angle;
