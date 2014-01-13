@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -8,6 +9,7 @@
 #include "sys_manager.h"
 #include "servo.h"
 #include "arm.h"
+#include "obj_classification.h"
 
 extern volatile char received_cmd[]; // this will hold the recieved string
 
@@ -19,7 +21,9 @@ uint8_t elbow_init = 170;
 uint8_t wrist_init = 120;
 uint8_t waver_init = 90;
 
-char op_flag = FALSE;
+obj_t op_flag ;
+
+#define ARM 0
 
 // goal : move (node, dir, deg)
 int move (arm_node_t node, uint8_t angle)
@@ -49,23 +53,22 @@ int move (arm_node_t node, uint8_t angle)
 void execute_command(char cmd[CMD_LEN+1])
 {
     // Check the command format
-    if (cmd[0] == '#' && cmd[2] == 'D') {
-        arm_node_t node_num = atoi(&cmd[1]);
-        angle = atoi(cmd+3);
-
-        ret = move (node_num, angle);
-
-        if (ret) {
-            com_echo("moving\r\n");
-        } else {
-            com_echo("bad command\r\n");
+    char *token = "MATCH";
+    if(! strncmp(cmd, token, 5)) {
+        switch (cmd[5])
+        {
+            case 'A':
+                my_printf("[Task] Find objection A\r\n");
+                classifier(OBJ_A);
+                op_flag = OBJ_A;
+                break;
+            case 'B':
+                my_printf("[Task] Find objection B\r\n");
+                classifier(OBJ_B);
+                op_flag = OBJ_B;
+                break;
         }
-
-        /* for debug, show the received cmd */
-        my_printf("[arm_task] Move node %d, to angle %d.\r\n", node_num, angle);
-
     } // End of format check
-
 }
 
 void arm_task(void *pvParameters)
@@ -74,7 +77,7 @@ void arm_task(void *pvParameters)
     uint8_t cnt = 0;
     char t;
 
-    arm_op_queue = xQueueCreate(1, sizeof(op_flag));
+   arm_op_queue = xQueueCreate(1, sizeof(op_flag));
 
     arm_set_origin_pos();
     while (1) {
@@ -85,8 +88,8 @@ void arm_task(void *pvParameters)
         } else {
             cnt = 0;
             execute_command(received_cmd);
+            while(!xQueueSend(arm_op_queue, &op_flag, (portTickType)10));
         }
-        xQueueSend(arm_op_queue, &op_flag, (portTickType)10);
     }
 }
 
@@ -102,5 +105,33 @@ void arm_set_origin_pos()
     move (ELBOW, elbow_init);
     move (WRIST, wrist_init);
     move (WAVER, waver_init);
+}
+
+void approach()
+{
+    int i;
+    uint8_t elbow_curr = 170;
+    uint8_t wrist_curr = 120;
+    for (i=0; i < 42; i++)
+    {
+        elbow_curr-=2;
+        wrist_curr-=2;
+        move (ELBOW, elbow_curr);
+        move (WRIST, wrist_curr);
+    }
+}
+
+void withdraw()
+{
+    int i;
+    uint8_t elbow_curr = 86;
+    uint8_t wrist_curr = 36;
+    for (i=0; i < 42; i++)
+    {
+        elbow_curr+=2;
+        wrist_curr+=2;
+        move (ELBOW, elbow_curr);
+        move (WRIST, wrist_curr);
+    }
 }
 

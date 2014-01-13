@@ -2,6 +2,7 @@
 #define __ARM_H__
 
 #include <stdint.h>
+#include "obj_classification.h"
 
 // Angle Constraints and Initial Value
 #define BASE_MIN 0
@@ -19,7 +20,7 @@
 #define TRUE 1
 #define FALSE 0
 
-extern char op_flag;
+extern obj_t op_flag;
 
 
 typedef enum {
@@ -35,5 +36,7 @@ void execute_command(char cmd[]);
 int move (arm_node_t node, uint8_t angle);
 void arm_task(void *pv);
 
+void approach();
+void withdraw();
 void robot_arm_initialization();
 #endif

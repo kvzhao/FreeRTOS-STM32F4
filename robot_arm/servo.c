@@ -78,6 +78,6 @@ void servo_set_pos (uint8_t ch, uint16_t angle)
             TIM4->CCR4 = cval;
             break;
     }
-    vTaskDelay(50);
+    //vTaskDelay(50);
 }
 

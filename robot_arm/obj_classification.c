@@ -21,45 +21,38 @@ void classifier (obj_t type)
 
 void grab_obj (obj_t type)
 {
-}
-void approach()
-{
-    int i;
-    uint8_t elbow_curr = 170;
-    uint8_t wrist_curr = 120;
-    for (i=0; i < 42; i++)
+    vTaskDelay(1000);
+    switch (type)
     {
-        elbow_curr-=2;
-        wrist_curr-=1;
-        move (ELBOW, elbow_curr);
-        move (WRIST, wrist_curr);
+        case OBJ_A:
+            my_printf("Grab A\r\n");
+            move (BASE, obj_container_A) ;
+            break;
+        case OBJ_B:
+            my_printf("Grab B\r\n");
+            move (BASE, obj_container_B) ;
+            break;
     }
-}
-void withdraw()
-{
-    int i;
-    uint8_t elbow_curr = 86;
-    uint8_t wrist_curr = 78;
-    for (i=0; i < 42; i++)
-    {
-        elbow_curr+=2;
-        wrist_curr+=1;
-        move (ELBOW, elbow_curr);
-        move (WRIST, wrist_curr);
-    }
+    my_printf("Arm moves forward\r\n");
+    approach();
+    vTaskDelay(1000);
+    my_printf("Arm moves backward\r\n");
+    withdraw();
+    vTaskDelay(1000);
 }
 
 void arm_operate_task(void *pv)
 {
-    my_printf("Enter operation function\r\n");
     while(1)
    {
-        xQueueReceive(arm_op_queue, &op_flag, (portTickType)(1));
-
-        if(op_flag == TRUE)
+            while(!xQueueReceive(arm_op_queue, &op_flag, (portTickType)(10)));
+        if(FALSE)
         {
+            vTaskDelay(10000);
             my_printf("operation enabled\r\n");
-            op_flag = FALSE;
+            grab_obj(op_flag);
+//            op_flag = FALSE;
+            my_printf("operation complete\r\n");
         }
     }
 }
