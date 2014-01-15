@@ -1,4 +1,4 @@
-TARGET:=RobotARM_Controller
+TARGET:=SLAMOS
 # TODO change to your ARM gcc toolchain path
 TOOLCHAIN_ROOT:=/usr
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
@@ -44,6 +44,7 @@ SRC += system_stm32f4xx.c
 SRC += main.c
 SRC += syscalls.c
 SRC += servo.c
+# terminal
 SRC += serial_io.c
 SRC += string.c
 SRC += sys_manager.c
@@ -51,7 +52,9 @@ SRC += memory.c
 SRC += shell.c
 SRC += parser.c
 SRC += linenoise.c
+# Test
 SRC += unit_test.c
+# Application
 SRC += arm.c
 
 # FreeRTOS Source Files
