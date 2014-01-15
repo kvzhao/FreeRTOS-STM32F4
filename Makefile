@@ -1,4 +1,4 @@
-TARGET:=FreeRTOS
+TARGET:=RobotARM_Controller
 # TODO change to your ARM gcc toolchain path
 TOOLCHAIN_ROOT:=/usr
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
@@ -19,6 +19,8 @@ INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
 INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
+INCLUDE+=-I$(CURDIR)/unit_test
+INCLUDE+=-I$(CURDIR)/robot_arm
 INCLUDE+=-I$(CURDIR)/inc
 
 BUILD_DIR = $(CURDIR)/build
@@ -28,6 +30,8 @@ BIN_DIR = $(CURDIR)/binary
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
+		  $(CURDIR)/unit_test \
+		  $(CURDIR)/robot_arm \
 		  $(CURDIR)/src \
           $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
@@ -47,6 +51,9 @@ SRC += memory.c
 SRC += shell.c
 SRC += parser.c
 SRC += linenoise.c
+SRC += usart_com.c
+SRC += unit_test.c
+SRC += arm.c
 
 # FreeRTOS Source Files
 SRC+=port.c

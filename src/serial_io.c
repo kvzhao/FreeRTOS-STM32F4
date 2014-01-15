@@ -14,7 +14,7 @@
 volatile char received_string[MAX_STRLEN+1]; // this will hold the recieved string
 
 /*
- * Configure USART3(PB10, PB11) to redirect myprintf data to host PC.
+ * Configure USART3(PB10, PB11) to redirect my_printf data to host PC.
  */
 void USART3_Configuration(void) {
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -47,7 +47,7 @@ void USART3_Configuration(void) {
   USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
 
     NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;       // we want to configure the USART3 interrupts
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY +1;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY +2;
     // this sets the priority group of the USART3 interrupts
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;      // this sets the subpriority inside the group
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;         // the USART3 interrupts are globally enabled
@@ -92,7 +92,7 @@ int getstr(void)
 {
     char str;
     str = serial.getch();
-    myprintf("%c",str);
+    my_printf("%c",str);
     return 1;
 }
 
@@ -273,7 +273,7 @@ double atof(const char *s)
 }
 /*=====================================================================================================*/
 /*=====================================================================================================*
-**函數 : smyprintf
+**函數 : smy_printf
 **功能 :
 **輸入 : ( char * str, const char * format, ... )
 **輸出 : strlen(str)
@@ -281,7 +281,7 @@ double atof(const char *s)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 
-int smyprintf(char *str, const char *format, ...)
+int smy_printf(char *str, const char *format, ...)
 {
 	va_list para;
 	va_start(para, format);
@@ -332,7 +332,7 @@ int smyprintf(char *str, const char *format, ...)
 }
 
 /*=====================================================================================================*
-**函數 : myprintf
+**函數 : my_printf
 **功能 :
 **輸入 :
 **輸出 : RS232_SendData(USART3, str, strlen(str));
@@ -340,7 +340,7 @@ int smyprintf(char *str, const char *format, ...)
 **=====================================================================================================*/
 /*=====================================================================================================*/
 
-int myprintf(const char *format, ...)
+int my_printf(const char *format, ...)
 {
 	char str[128];
 	va_list para;

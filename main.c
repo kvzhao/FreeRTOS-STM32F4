@@ -3,19 +3,22 @@
 #include "task.h"
 #include "queue.h"
 
-#include "math.h"
 #include "stdio.h"
 #include "stm32f4xx_usart.h"
 
 #include "servo.h"
 #include "serial_io.h"
+#include "usart_com.h"
 #include "sys_manager.h"
 #include "shell.h"
+#include "unit_test.h"
 
-void USART3_Configuration(void);
+#include "arm.h"
+#include "usart_com.h"
+
+#define UNIT_TEST 0
+
 void null_task(void *p);
-void test_FPU_test(void* p);
-void test_servo_task(void* p);
 
 int main(void) {
   uint8_t ret;
@@ -25,20 +28,32 @@ int main(void) {
 
   Serial_Configuration();
   Servo_Configuration();
+  USART1_COM_Configuration(57600);
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
+  vSemaphoreCreateBinary(com_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
+  com_rx_queue = xQueueCreate(1, sizeof(com_msg));
+
+  ret = xTaskCreate(arm_task,
+          (signed portCHAR *)"Arm",
+          512, NULL,
+          tskIDLE_PRIORITY +5, NULL);
 
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
           2048, NULL,
-          tskIDLE_PRIORITY +5, NULL);
+          tskIDLE_PRIORITY +3, NULL);
+
+#if UNIT_TEST
+  ret = xTaskCreate(test_task, (signed portCHAR *)"Unit Testing", 512, NULL, tskIDLE_PRIORITY +4, NULL);
+#endif
 
   if (ret == pdTRUE) {
-    printf("System Started!\n\r");
+    //my_printf("System Started!\n\r");
     vTaskStartScheduler();  // should never return
   } else {
-    printf("System Error!\n");
+    my_printf("System Error!\n");
     // --TODO blink some LEDs to indicate fatal system error
   }
 
@@ -72,8 +87,7 @@ void vApplicationMallocFailedHook(void) {
    important that vApplicationIdleHook() is permitted to return to its calling
    function, because it is the responsibility of the idle task to clean up
    memory allocated by the kernel to any task that has since been deleted. */
-void vApplicationIdleHook(void) {
-}
+//void vApplicationIdleHook(void) {}
 
 void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName) {
   (void) pcTaskName;
@@ -92,36 +106,3 @@ void null_task(void *pvTaskParameters)
     vTaskDelete(NULL);
 }
 
-void test_FPU_test(void* p) {
-  float ff = 1.0f;
-  printf("Start FPU test task.\n");
-  for (;;) {
-    float s = sinf(ff);
-    ff += s;
-    // TODO some other test
-    vTaskDelay(1000);
-  }
-  vTaskDelete(NULL);
-}
-
-void test_servo_task(void *pvTaskParameters)
-{
-    printf("Start Servo test task.\n\t");
-    while(1) {
-        Servo_set_pos(60,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(120,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(60,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-
-        Servo_set_pos(180,0);
-        printf("TIM4->ARR = %u, TIM4->CCR1 = %u\r\n",TIM4->ARR,TIM4->CCR1);
-        vTaskDelay(500);
-    }
-}

@@ -50,9 +50,9 @@ void shell_linenoise_completion(const char *buf, linenoiseCompletions *lc)
 void shell_task()
 {
 	/* Clear the screen */
-    myprintf("\x1b[H\x1b[2J");
+    my_printf("\x1b[H\x1b[2J");
 	/* Show the prompt messages */
-    myprintf("[System status]Initialized successfully!\n\r");
+    my_printf("[System status] Initialized successfully!\n\r");
 
 	while (1) {
 		linenoiseSetCompletionCallback(shell_linenoise_completion);
@@ -62,7 +62,7 @@ void shell_task()
 		char *shell_str = linenoise("Shell > ");
 
 		if(shell_str == NULL) {
-            myprintf("Can't receive the command.\r\n");
+            my_printf("Can't receive the command.\r\n");
 			continue;
         }
 
@@ -74,7 +74,7 @@ void shell_task()
 /**** Customize command function ******************************************************/
 void shell_unknown_cmd(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
-	myprintf("Command not found\n\r");
+	my_printf("Command not found\n\r");
 }
 
 void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
@@ -84,15 +84,12 @@ void shell_clear(char parameter[][MAX_CMD_LEN], int par_cnt)
 
 void shell_help(char parameter[][MAX_CMD_LEN], int par_cnt)
 {
-	myprintf("\n\rLinenoise shell environment>\n\r");
-	myprintf("The lineoise is authorized under BSD License and released by antirez.\n\r");
-	myprintf("The QCopterFlightControl is based on Hom19910422's version.\n\r");
-    myprintf("The Robot Controller is edited by kvzhao.\r\n");
+	my_printf("\n\rLinenoise shell environment>\n\r");
 
-	myprintf("\n\rSupport commands:\n\r");
-	myprintf("clear  \tClear the screan\n\r");
-	myprintf("help \tShow the list of all commands\n\r");
-	myprintf("ps \tShow the list of all tasks\n\r\n\r");
+	my_printf("\n\rSupport commands:\n\r");
+	my_printf("clear  \tClear the screan\n\r");
+	my_printf("help \tShow the list of all commands\n\r");
+	my_printf("ps \tShow the list of all tasks\n\r\n\r");
 }
 
 void shell_ps(char parameter[][MAX_CMD_LEN], int par_cnt)
@@ -101,8 +98,8 @@ void shell_ps(char parameter[][MAX_CMD_LEN], int par_cnt)
 
 	vTaskList(buf);
 
-	//TODO:replace the hardcode by using smyprintf()
-	myprintf("\n\rName          State   Priority  Stack Num\n\r");
-	myprintf("*****************************************\n\r");
-	myprintf("%s\n\r", buf);
+	//TODO:replace the hardcode by using smy_printf()
+	my_printf("\n\rName          State   Priority  Stack Num\n\r");
+	my_printf("*****************************************\n\r");
+	my_printf("%s\n\r", buf);
 }
