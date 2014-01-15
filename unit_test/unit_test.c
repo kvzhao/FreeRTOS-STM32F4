@@ -2,7 +2,6 @@
 #include "serial_io.h"
 
 #include "arm.h"
-#include "usart_com.h"
 #include "servo.h"
 
 #include "FreeRTOS.h"

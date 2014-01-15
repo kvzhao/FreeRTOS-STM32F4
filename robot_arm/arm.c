@@ -3,13 +3,12 @@
 #include "FreeRTOS.h"
 #include "task.h"
 //
-#include "usart_com.h"
 #include "serial_io.h"
 #include "sys_manager.h"
 #include "servo.h"
 #include "arm.h"
 
-extern volatile char received_cmd[]; // this will hold the recieved string
+volatile char received_cmd[CMD_LEN]; // this will hold the recieved string
 
 int angle, ret;
 int base_cur_angle;
@@ -50,9 +49,7 @@ void execute_command(char cmd[CMD_LEN+1])
         ret = move (node_num, angle);
 
         if (ret) {
-            com_echo("moving\r\n");
         } else {
-            com_echo("bad command\r\n");
         }
 
         /* for debug, show the received cmd */
@@ -70,7 +67,7 @@ void arm_task(void *pvParameters)
 
     while (1) {
         if ( cnt < CMD_LEN ) {
-            t = com.getch(); //TODO: method of receiving command
+            //t = com.getch(); //TODO: method of receiving command
             if ( t >= 0x21 && t <= 0x7E )
                 received_cmd[cnt++]= t;
         } else {

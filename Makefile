@@ -51,7 +51,6 @@ SRC += memory.c
 SRC += shell.c
 SRC += parser.c
 SRC += linenoise.c
-SRC += usart_com.c
 SRC += unit_test.c
 SRC += arm.c
 

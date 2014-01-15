@@ -5,6 +5,9 @@
 #define BASE_MIN 0
 #define BASE_MAX 180
 
+extern volatile char received_cmd[]; // this will hold the recieved string
+#define CMD_LEN 6
+
 typedef enum {
     BASE = 0,
     ELBOW,

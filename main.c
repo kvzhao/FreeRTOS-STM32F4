@@ -1,20 +1,21 @@
+// FreeRTOS
 #include "stm32f4xx.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-
+// standard
 #include "stdio.h"
 #include "stm32f4xx_usart.h"
-
+// Communication
 #include "servo.h"
 #include "serial_io.h"
-#include "usart_com.h"
+// System
 #include "sys_manager.h"
 #include "shell.h"
+// Debug
 #include "unit_test.h"
 
 #include "arm.h"
-#include "usart_com.h"
 
 #define UNIT_TEST 0
 
@@ -28,12 +29,9 @@ int main(void) {
 
   Serial_Configuration();
   Servo_Configuration();
-  USART1_COM_Configuration(57600);
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
-  vSemaphoreCreateBinary(com_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
-  com_rx_queue = xQueueCreate(1, sizeof(com_msg));
 
   ret = xTaskCreate(arm_task,
           (signed portCHAR *)"Arm",
