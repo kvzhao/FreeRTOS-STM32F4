@@ -1,8 +1,8 @@
 #include <stdlib.h>
-
+// FreeRTOS
 #include "FreeRTOS.h"
 #include "task.h"
-
+//
 #include "usart_com.h"
 #include "serial_io.h"
 #include "sys_manager.h"
@@ -38,6 +38,8 @@ int move (arm_node_t node, int8_t angle)
     return 1;
 }
 
+// Command format : #<number of servo>D<Degree of angle>
+// Example #0D120
 void execute_command(char cmd[CMD_LEN+1])
 {
     // Check the command format
@@ -68,7 +70,7 @@ void arm_task(void *pvParameters)
 
     while (1) {
         if ( cnt < CMD_LEN ) {
-            t = com.getch();
+            t = com.getch(); //TODO: method of receiving command
             if ( t >= 0x21 && t <= 0x7E )
                 received_cmd[cnt++]= t;
         } else {

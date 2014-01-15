@@ -1,5 +1,8 @@
 #include "servo.h"
 
+// TODO: modify PWM frequency for controlling servos
+// Analog servo : 50 Hz
+// Digital servo :
 void TIM4_PWM_Configuration()
 {
     /* RCC Initialization */
