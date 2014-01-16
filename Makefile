@@ -32,6 +32,7 @@ vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
 		  $(CURDIR)/unit_test \
 		  $(CURDIR)/robot_arm \
+		  $(CURDIR)/motion_control \
 		  $(CURDIR)/src \
           $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
@@ -56,6 +57,7 @@ SRC += linenoise.c
 SRC += unit_test.c
 # Application
 SRC += arm.c
+SRC += encoder.c
 
 # FreeRTOS Source Files
 SRC+=port.c
