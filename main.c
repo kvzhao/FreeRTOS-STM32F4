@@ -33,11 +33,6 @@ int main(void) {
   vSemaphoreCreateBinary(serial_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
 
-  ret = xTaskCreate(arm_task,
-          (signed portCHAR *)"Arm",
-          512, NULL,
-          tskIDLE_PRIORITY +5, NULL);
-
   ret = xTaskCreate(shell_task,
           (signed portCHAR *)"Shell",
           2048, NULL,
