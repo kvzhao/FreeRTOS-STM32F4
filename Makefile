@@ -76,10 +76,11 @@ SRC+=misc.c
 SRC+=stm32f4xx_gpio.c
 SRC+=stm32f4xx_i2c.c
 SRC+=stm32f4xx_rcc.c
-#SRC+=stm32f4xx_spi.c
 SRC+=stm32f4xx_tim.c
 SRC+=stm32f4xx_usart.c
 SRC+=stm32f4xx_rng.c
+SRC+=stm32f4xx_spi.c
+SRC+=stm32f4xx_lis302dl.c
 
 CDEFS=-DUSE_STDPERIPH_DRIVER
 CDEFS+=-DSTM32F4XX
