@@ -11,6 +11,4 @@ void MEMS_Configuration()
   LIS302DL_InitStruct.Full_Scale = LIS302DL_FULLSCALE_2_3;
   LIS302DL_InitStruct.Self_Test = LIS302DL_SELFTEST_NORMAL;
   LIS302DL_Init(&LIS302DL_InitStruct);
-  /* SysTick end of count event each 100ms */
-  SysTick_Config(SystemCoreClock/1000);
 }
