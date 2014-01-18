@@ -21,6 +21,7 @@ INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
 INCLUDE+=-I$(CURDIR)/unit_test
 INCLUDE+=-I$(CURDIR)/robot_arm
+INCLUDE+=-I$(CURDIR)/navigation
 INCLUDE+=-I$(CURDIR)/inc
 
 BUILD_DIR = $(CURDIR)/build
