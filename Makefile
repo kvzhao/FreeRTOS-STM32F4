@@ -18,6 +18,10 @@ INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
 INCLUDE+=-I$(CURDIR)/Libraries/StdPeriph_Driver/inc
+INCLUDE+=-I$(CURDIR)/Libraries/USB_HOST_Lib/Core/inc
+INCLUDE+=-I$(CURDIR)/Libraries/USB_OTG_Driver/inc
+INCLUDE+=-I$(CURDIR)/Libraries/USB_HOST_Lib/Class/MSC/inc
+INCLUDE+=-I$(CURDIR)/Libraries/fat_fs/inc
 INCLUDE+=-I$(CURDIR)/config
 INCLUDE+=-I$(CURDIR)/unit_test
 INCLUDE+=-I$(CURDIR)/robot_arm
@@ -29,6 +33,9 @@ BIN_DIR = $(CURDIR)/binary
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/StdPeriph_Driver/src \
+		  $(CURDIR)/Libraries/USB_HOST_Lib/Core/src \
+		  $(CURDIR)/Libraries/USB_HOST_Lib/Class/MSC/src \
+		  $(CURDIR)/Libraries/fat_fs/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
 		  $(CURDIR)/unit_test \
 		  $(CURDIR)/robot_arm \
@@ -80,6 +87,11 @@ SRC+=stm32f4xx_rcc.c
 SRC+=stm32f4xx_tim.c
 SRC+=stm32f4xx_usart.c
 SRC+=stm32f4xx_rng.c
+
+# USB Host Source Files
+SRC+=ff.c
+SRC+=fattime.c
+SRC+=usbh_core.c
 
 CDEFS=-DUSE_STDPERIPH_DRIVER
 CDEFS+=-DSTM32F4XX

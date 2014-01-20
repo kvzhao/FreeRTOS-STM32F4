@@ -42,6 +42,8 @@
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
 
+/* Private function prototypes -----------------------------------------------*/
+
 /**
   * @brief   This function handles NMI exception.
   * @param  None
@@ -140,6 +142,7 @@ void UsageFault_Handler(void)
 void DebugMon_Handler(void)
 {
 }
+
 
 // this is the interrupt request handler (IRQ) for ALL USART3 interrupts
 void USART3_IRQHandler(void) {

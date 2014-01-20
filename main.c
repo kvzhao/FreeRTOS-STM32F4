@@ -12,6 +12,11 @@
 // System
 #include "sys_manager.h"
 #include "shell.h"
+// File system
+#include "usbh_usr.h"
+#include "usbh_core.h"
+#include "usbh_msc_core.h"
+#include "ff.h"
 // Debug
 #include "unit_test.h"
 
