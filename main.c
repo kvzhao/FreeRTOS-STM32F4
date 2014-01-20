@@ -18,7 +18,7 @@
 #include "arm.h"
 #include "mems.h"
 
-#define UNIT_TEST 0
+#define UNIT_TEST 1
 
 void null_task(void *p);
 
@@ -30,6 +30,7 @@ int main(void) {
 
   Serial_Configuration();
   Servo_Configuration();
+  MEMS_Configuration();
 
   vSemaphoreCreateBinary(serial_tx_wait_sem);
   serial_rx_queue = xQueueCreate(1, sizeof(serial_msg));
@@ -100,3 +101,17 @@ void null_task(void *pvTaskParameters)
     vTaskDelete(NULL);
 }
 
+/**
+  * @brief  MEMS accelerometre management of the timeout situation.
+  * @param  None.
+  * @retval None.
+  */
+uint32_t LIS302DL_TIMEOUT_UserCallback(void)
+{
+
+  my_printf("LIS302DL Timeout!\n\r");
+  /* MEMS Accelerometer Timeout error occured */
+  while (1)
+  {
+  }
+}
