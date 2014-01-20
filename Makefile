@@ -17,7 +17,7 @@ INCLUDE+=-I$(FREERTOS)/include
 INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
-INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
+INCLUDE+=-I$(CURDIR)/Libraries/StdPeriph_Driver/inc
 INCLUDE+=-I$(CURDIR)/config
 INCLUDE+=-I$(CURDIR)/unit_test
 INCLUDE+=-I$(CURDIR)/robot_arm
@@ -28,7 +28,7 @@ BIN_DIR = $(CURDIR)/binary
 
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
-vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
+vpath %.c $(CURDIR)/Libraries/StdPeriph_Driver/src \
           $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
 		  $(CURDIR)/unit_test \
 		  $(CURDIR)/robot_arm \
@@ -68,7 +68,7 @@ SRC+=heap_4.c
 # Standard Peripheral Source Files
 # SRC+=stm32f4xx_syscfg.c
 SRC+=misc.c
-#SRC+=stm32f4xx_adc.c
+SRC+=stm32f4xx_adc.c
 #SRC+=stm32f4xx_dac.c
 #SRC+=stm32f4xx_dma.c
 #SRC+=stm32f4xx_exti.c
