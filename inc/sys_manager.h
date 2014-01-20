@@ -17,6 +17,8 @@ enum {
         /*TODO : global struct */
 };
 
+void Delay(__IO uint32_t nCount);
+
 // Queue and Semaphore for USART3 serial_io (used in shell)
 extern xQueueHandle serial_rx_queue;
 extern xSemaphoreHandle serial_tx_wait_sem;
