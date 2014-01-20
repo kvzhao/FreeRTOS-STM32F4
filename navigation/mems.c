@@ -1,4 +1,5 @@
 #include "mems.h"
+#include "sys_manager.h"
 
 void MEMS_Configuration()
 {
@@ -14,7 +15,7 @@ void MEMS_Configuration()
   LIS302DL_Init(&LIS302DL_InitStruct);
 
   // Required delay for the MEMS Accelerometre: Turn-on time = 3/Output data Rate = 3/100 = 30ms
-    Delay(30);
+   Delay(3000);
 
     // MEMS High Pass Filter configuration
     LIS302DL_FilterStruct.HighPassFilter_Data_Selection = LIS302DL_FILTEREDDATASELECTION_OUTPUTREGISTER;
