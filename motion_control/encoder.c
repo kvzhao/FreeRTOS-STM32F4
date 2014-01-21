@@ -1,6 +1,6 @@
 #include "encoder.h"
 
-void encoder_configuration()
+void encoder_Configuration()
 {
 
 }
