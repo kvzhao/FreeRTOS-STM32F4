@@ -16,7 +16,7 @@
 #include "unit_test.h"
 // Application
 #include "arm.h"
-#include "mems.h"
+#include "MEMS.h"
 
 #define UNIT_TEST 1
 
